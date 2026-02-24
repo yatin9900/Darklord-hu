@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Shreya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ffafbd;
+            --rose: #ffc3a0;
+            --accent: #d63384;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--pink), var(--rose));
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Falling Petals & Hearts Animation */
+        .falling-element {
+            position: absolute;
+            top: -10%;
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Smooth Slide Transitions */
+        .slide {
+            position: absolute;
+            width: 85%; max-width: 400px; text-align: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+            transform: scale(0.9);
+            z-index: 10;
+        }
+
+        .active { 
+            opacity: 1; visibility: visible; 
+            transform: scale(1);
+        }
+
+        .outer-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 25px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .inner-image-box {
+            width: 100%; height: 220px; background: #f0f0f0;
+            border-radius: 15px; margin-bottom: 20px; overflow: hidden;
+            border: 2px solid white;
+        }
+        .inner-image-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .romantic-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.9rem; color: var(--accent); margin-bottom: 10px;
+        }
+
+        .italic { font-style: italic; }
+
+        .typewriter { display: inline-block; min-height: 1.5em; }
+
+        button {
+            background: var(--accent); color: white; border: none;
+            padding: 12px 30px; border-radius: 50px; margin-top: 20px;
+            cursor: pointer; font-weight: bold; font-family: 'Poppins';
+            box-shadow: 0 5px 15px rgba(214, 51, 132, 0.3);
+            transition: 0.3s;
+        }
+        button:hover { transform: scale(1.05); }
+
+        .curve-box {
+            background: white; margin: 12px 0; padding: 15px;
+            border-radius: 10px 40px 40px 10px; cursor: pointer;
+            display: none; border-left: 6px solid var(--accent);
+            text-align: left; font-size: 0.95rem;
+            box-shadow: 2px 5px 10px rgba(0,0,0,0.05);
+        }
+        .revealed { display: block !important; animation: fadeIn 0.8s forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        #message-overlay {
+            position: fixed; bottom: -100%; left: 0;
+            width: 100%; height: 85%; background: white;
+            border-radius: 30px 30px 0 0; padding: 40px 30px;
+            box-sizing: border-box; transition: bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100; text-align: center; overflow-y: auto;
+        }
+        .show-message { bottom: 0 !important; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="YOUR_SONG_URL.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="animation-container"></div>
+
+    <div class="slide active" id="slide1">
+        <div class="outer-box">
+            <div class="inner-image-box"><img src="image1.jpg" alt="Photo 1"></div>
+            <div class="romantic-font typewriter italic" data-text="Hey Shreya,"></div>
+            <p class="typewriter" data-text="Can we talk for a moment? There's something important I want to tell you."></p>
+            <br><button onclick="startExperience(2)">Continue</button>
+        </div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <div class="outer-box">
+            <div class="inner-image-box"><img src="image2.jpg" alt="Photo 2"></div>
+            <p class="typewriter" data-text="I know I've hurt you... And I've been feeling bad about it."></p>
+            <button onclick="nextSlide(3)">Next &rarr;</button>
+        </div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <div class="romantic-font typewriter italic" data-text="Little things I want to tell you"></div>
+        <p style="font-size: 0.8rem;">(Tap the heart to reveal)</p>
+        <div id="trigger-container" style="font-size: 3rem; cursor:pointer;" onclick="revealBox()">❤️</div>
+        
+        <div class="curve-box" id="cb1">I messed up.. and I am really sorry for that.</div>
+        <div class="curve-box" id="cb2">I promise I'll be better for you.</div>
+        <div class="curve-box" id="cb3">Please forgive me... You mean so much to me.</div>
+        
+        <button id="btn3" style="display:none;" onclick="nextSlide(4)">My Message &rarr;</button>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="romantic-font typewriter italic" data-text="From my heart"></div>
+        <div class="outer-box" style="margin-top: 15px;" onclick="toggleMessage()">
+            <div class="inner-image-box"><img src="image3.jpg" alt="Photo 3"></div>
+            <p><strong>My Message &rarr;</strong></p>
+        </div>
+    </div>
+
+    <div id="message-overlay">
+        <h2 class="romantic-font italic">I am sorry</h2>
+        <div id="long-message" style="line-height: 1.6; color: #555; text-align: left; font-size: 0.95rem;"></div>
+        <div class="romantic-font italic" style="margin-top: 30px; font-size: 2.2rem;">From Darku</div>
+        <button onclick="toggleMessage()" style="background: #ccc; color: #333;">Close</button>
+    </div>
+
+    <script>
+        // Petal and Heart Animation
+        function createFallingElement() {
+            const container = document.getElementById('animation-container');
+            const el = document.createElement('div');
+            el.classList.add('falling-element');
+            
+            // Randomly choose between heart and petal
+            const items = ['🌸', '❤️', '🌹', '🍃'];
+            el.innerHTML = items[Math.floor(Math.random() * items.length)];
+            
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = Math.random() * 15 + 15 + 'px';
+            el.style.duration = Math.random() * 3 + 4 + 's';
+            el.style.animationDuration = el.style.duration;
+            el.style.opacity = Math.random() * 0.5 + 0.3;
+            
+            container.appendChild(el);
+            setTimeout(() => { el.remove(); }, 7000);
+        }
+        setInterval(createFallingElement, 300);
+
+        // Typewriter logic
+        function typeWriter(element, text, speed = 50) {
+            let i = 0; element.innerHTML = "";
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++; setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        function startTypewriters(containerId) {
+            const elements = document.querySelectorAll(`#${containerId} .typewriter`);
+            elements.forEach(el => {
+                const text = el.getAttribute('data-text');
+                if(text) typeWriter(el, text);
+            });
+        }
+
+        window.onload = () => startTypewriters('slide1');
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            setTimeout(() => {
+                const next = document.getElementById('slide' + n);
+                next.classList.add('active');
+                startTypewriters('slide' + n);
+            }, 600);
+        }
+
+        function startExperience(n) {
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(e => console.log("Music blocked"));
+            nextSlide(n);
+        }
+
+        let currentBox = 1;
+        function revealBox() {
+            if(currentBox <= 3) {
+                document.getElementById('cb' + currentBox).classList.add('revealed');
+                currentBox++;
+            }
+            if(currentBox > 3) {
+                document.getElementById('btn3').style.display = 'inline-block';
+                document.getElementById('trigger-container').style.display = 'none';
+            }
+        }
+
+        function toggleMessage() {
+            const overlay = document.getElementById('message-overlay');
+            overlay.classList.toggle('show-message');
+            if(overlay.classList.contains('show-message')) {
+                const msg = "For hurting you and making you feel upset, I'm truly sorry. I never wanted to be the reason behind your tears or your silence. You matter to me more than I always manage to show, and I hate that I let you down. I promise to grow, to listen, and to be better for you every single day. Thank you for staying, for caring, and for being you. I'm really trying... and I hope you can forgive me.";
+                setTimeout(() => typeWriter(document.getElementById('long-message'), msg, 35), 800);
+            }
+        }
+    </script>
+</body>
+</html>
